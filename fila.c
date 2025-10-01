@@ -105,3 +105,43 @@ void KillFila(Fila *fila){
     f->size = 0;
 }
 
+void PassthroughQueue(Fila *fila, file *fs, Estilo st){
+    Stfila *f = ((Stfila*)fila);
+    if(f == NULL || f->inicio == NULL){
+        printf("Não há elementos suficientes na fila!\n");
+        return;
+    }
+
+    no* atual = f->inicio;
+    while(atual != NULL){
+        Forma formaatual = (Forma) atual->forma;
+        SelectQueue(formaatual, fs, st);
+        atual = atual->prox;
+    }
+}
+
+
+void SelectQueue(Forma f, file *fs, Estilo st){
+    switch (GetTipoForma(f))
+    {
+    case CIRCULO:
+        
+        break;
+    case RETANGULO: 
+
+        break;
+
+    case LINHA: 
+
+        break;
+
+    case TEXTO: 
+
+        break;
+
+    default:
+        printf("A forma inserida não é válida!\n");
+        break;
+    }
+}
+

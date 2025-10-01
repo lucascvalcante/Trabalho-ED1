@@ -1,6 +1,10 @@
 #ifndef FILA_H
 #define FILA_H
 
+#include "formas.h"
+#include "texto.h"
+
+typedef FILE file;
 typedef void *Forma;
 typedef void *Fila;
 
@@ -33,7 +37,7 @@ Fila InicioFila(Fila *f);
 /// @brief Obtém o elemento da fila após o primeiro
 /// @param f Ponteiro apontando para a fila
 /// @return Ponteiro para o próximo elemento em relação ao início 
-Fila NexFila(Fila *f);
+Fila NextFila(Fila *f);
 
 
 /// @brief Libera toda a memória alocada pela fila
@@ -45,6 +49,22 @@ void KillFila(Fila *f);
 /// @param f Ponteiro apontando para a fila
 /// @return o tamanho
 int SizeFila(Fila *f);
+
+
+/// @brief Percorre uma fila e realiza uma função de ação em cada elemento
+/// @param f Ponteiro apontando para a fila
+/// @param tipo Tipo da forma presente na fila
+/// @param fs Ponteiro para o arquivo svg onde as formas serão inseridas
+/// @param st Estilo de texto que será usado elementos do tipo texto
+void PassthroughQueue(Fila *f, Tipo_Forma tipo, file *fs, Estilo st);
+
+
+/// @brief Seleciona a ação que será realizada em um elemento da fila
+/// @param f Ponteiro apontando para uma forma
+/// @param tipo Tipo da forma que será usada(Círculo, retângulo, etc)
+/// @param fs Ponteiro para o arquivo svf onde as formas serão inseridas
+/// @param st Estilo do texto que será usado para elementos do tipo texto
+void SelectQueue(Forma *f, Tipo_Forma tipo, file *fs, Estilo st);
 
 
 #endif

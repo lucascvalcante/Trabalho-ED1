@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>    
+#include <string.h>
+#include "formas.h"    
 
 #define pi 3.14159265359
 
@@ -10,6 +11,7 @@ typedef struct Circulo{
     int id;
     double x, y, r;
     char *corb, *corp;
+    Tipo_Forma tipo;
 }StCirculo;
 
 
@@ -25,6 +27,7 @@ Circulo Criar_Circulo(int id, double x, double y, double r, char *corp, char *co
     c->r = r;
     c->x = x;
     c->y = y;
+    c->tipo = CIRCULO;
 
     c->corb = malloc(strlen(corb)+1);
     if(c->corb == NULL){

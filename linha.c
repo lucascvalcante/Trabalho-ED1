@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "formas.h"
 
-typedef struct linha{
+typedef struct{
     int id;
     double x1, y1, x2, y2;
     char *cor;
@@ -19,8 +20,8 @@ Linha Criar_Linha(int id, double x1, double y1, double x2, double y2, char *cor)
     } 
     l->id = id;
     l->x1 = x1;
-    l->x2 = x2;
     l->y1 = y1;
+    l->x2 = x2;
     l->y2 = y2;
 
     l->cor = malloc(strlen(cor)+1);
