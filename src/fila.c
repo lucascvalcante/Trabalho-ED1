@@ -74,7 +74,7 @@ Fila NexFila(Fila *fila){
     return f->inicio->prox->forma;
 }
 
-void RetirarFila(Fila *fila){
+Forma RetirarFila(Fila *fila){
     Stfila *f = ((Stfila*)fila);
 
     if(f->inicio == NULL){
@@ -82,12 +82,14 @@ void RetirarFila(Fila *fila){
         exit(1);
     }
     no *first = f->inicio;
+    Forma removido = f->inicio;
     f->inicio = f->inicio->prox;
     if(f->inicio == NULL){
         f->fim = NULL;
     } 
     free(first);
     f->size--;
+    return removido;
 }
 
 void KillFila(Fila *fila){
@@ -105,7 +107,7 @@ void KillFila(Fila *fila){
     f->size = 0;
 }
 
-void PassthroughQueue(Fila *fila, file *fs, Estilo st){
+void PassthroughQueue(Fila *fila, FILE *fs, Estilo st){
     Stfila *f = ((Stfila*)fila);
     if(f == NULL || f->inicio == NULL){
         printf("Não há elementos suficientes na fila!\n");
@@ -121,7 +123,7 @@ void PassthroughQueue(Fila *fila, file *fs, Estilo st){
 }
 
 
-void SelectQueue(Forma f, file *fs, Estilo st){
+void SelectQueue(Forma *f, FILE *fs, Estilo st){
     switch (GetTipoForma(f))
     {
     case CIRCULO:
@@ -144,4 +146,11 @@ void SelectQueue(Forma f, file *fs, Estilo st){
         break;
     }
 }
+
+int SizeFila(Fila *fila){
+    Stfila *f = ((Stfila*)fila);
+    return f->size;
+}
+
+
 
