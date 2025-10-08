@@ -24,36 +24,42 @@ Arena CriarArena(double largura, double altura){
 } 
 
 
-void InserirArena(Forma f, Arena *arena){
+void InserirArena(Forma f, Arena arena){
     Starena *a = ((Starena*)arena);
     
     InserirFila(a->FilaArena, f);
 } 
 
-Forma RetirarArena(Arena *arena){
+Forma RetirarArena(Arena arena){
     Starena *a = ((Starena*)arena);
     return RetirarFila(a->FilaArena);
 }
 
-int GetNumeroFormas(Arena *arena){
+int GetNumeroFormas(Arena arena){
     Starena *a = ((Starena*)arena);
     return SizeFila(a->FilaArena);
 } 
 
-void SetLarguraArena(Arena *arena, double largura){
+void SetLarguraArena(Arena arena, double largura){
     Starena *a = ((Starena*)arena);
     a->largura = largura;
 }
 
-void SetAlturaArena(Arena *arena, double altura){
+void SetAlturaArena(Arena arena, double altura){
     Starena *a = ((Starena*)arena);
     a->altura = altura;
 }
 
-double GetLarguraArena(Arena *arena){
+double GetLarguraArena(Arena arena){
     return ((Starena*)arena)->largura;
 }
 
-double GetAlturaArena(Arena *arena){
+double GetAlturaArena(Arena arena){
     return ((Starena*)arena)->altura;
+}
+
+void KillArena(Arena arena){
+    Starena *a = ((Starena*)arena);
+    KillFila(a->FilaArena);
+    free(a);
 }
