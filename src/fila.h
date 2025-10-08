@@ -19,35 +19,29 @@ Fila Criar_Fila();
 /// @brief Insere elementos no final da fila
 /// @param f Ponteiro apontando para a fila
 /// @param f1 Forma que será inserida na fila
-void InserirFila(Fila *f, Forma f1);
+void InserirFila(Fila f, Forma f1);
 
 
 /// @brief Retira o primeiro elemento da fila
 /// @param f Ponteiro para a fila
 /// @return O elemento retirado
-Forma RetirarFila(Fila *f);
+Forma RetirarFila(Fila f);
 
 /// @brief Obtém o primeiro elemento da fila sem removê-lo
 /// @param f Ponteiro apontando para a fila
 /// @return O elemento presente no ínicio da fila
-Fila InicioFila(Fila *f);
-
-
-/// @brief Obtém o elemento da fila após o primeiro
-/// @param f Ponteiro apontando para a fila
-/// @return Ponteiro para o próximo elemento em relação ao início 
-Fila NextFila(Fila *f);
+Forma InicioFila(Fila f);
 
 
 /// @brief Libera toda a memória alocada pela fila
 /// @param f Ponteiro apontando para a fila
-void KillFila(Fila *f);
+void KillFila(Fila f);
 
 
 /// @brief Retorna o tamanho atual da fila
 /// @param f Ponteiro apontando para a fila
 /// @return o tamanho
-int SizeFila(Fila *f);
+int SizeFila(Fila f);
 
 
 /// @brief Percorre uma fila e realiza uma função de ação em cada elemento
@@ -55,7 +49,7 @@ int SizeFila(Fila *f);
 /// @param tipo Tipo da forma presente na fila
 /// @param fs Ponteiro para o arquivo svg onde as formas serão inseridas
 /// @param st Estilo de texto que será usado elementos do tipo texto
-void PassthroughQueue(Fila *f, FILE *fs, Estilo st);
+void PassthroughQueue(Fila f, FILE *fs, Estilo st);
 
 
 /// @brief Seleciona a ação que será realizada em um elemento da fila
@@ -63,7 +57,7 @@ void PassthroughQueue(Fila *f, FILE *fs, Estilo st);
 /// @param tipo Tipo da forma que será usada(Círculo, retângulo, etc)
 /// @param fs Ponteiro para o arquivo svf onde as formas serão inseridas
 /// @param st Estilo do texto que será usado para elementos do tipo texto
-void SelectQueue(Forma *f, FILE *fs, Estilo st);
+void SelectQueue(Forma f, FILE *fs, Estilo st);
 
 
 #endif

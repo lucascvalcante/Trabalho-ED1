@@ -7,7 +7,7 @@
 typedef void *Forma;
 
 typedef struct no{
-    Forma *forma;
+    Forma forma;
     char tipo;
     struct no *prox;
 }no;
@@ -32,7 +32,7 @@ Fila Criar_Fila(){
     return ((Stfila*)f);
 }
 
-void InserirFila(Fila *fila, Forma forma){
+void InserirFila(Fila fila, Forma forma){
     Stfila *f = ((Stfila*)fila);
 
     no *novo = malloc(sizeof(no));
@@ -55,7 +55,7 @@ void InserirFila(Fila *fila, Forma forma){
     f->size++;
 }
 
-Fila InicioFila(Fila *fila){
+Forma InicioFila(Fila fila){
     Stfila *f = ((Stfila*)fila);
 
     if(f->inicio == NULL){
@@ -64,17 +64,7 @@ Fila InicioFila(Fila *fila){
     return f->inicio->forma;
 }
 
-Fila NexFila(Fila *fila){
-    Stfila *f = ((Stfila*)fila);
-
-    if(f->inicio == NULL || f->inicio->prox == NULL){
-        printf("A fila não tem elementos suficientes!\n");
-        return NULL;
-    }
-    return f->inicio->prox->forma;
-}
-
-Forma RetirarFila(Fila *fila){
+Forma RetirarFila(Fila fila){
     Stfila *f = ((Stfila*)fila);
 
     if(f->inicio == NULL){
@@ -82,7 +72,7 @@ Forma RetirarFila(Fila *fila){
         exit(1);
     }
     no *first = f->inicio;
-    Forma removido = f->inicio;
+    Forma removido = f->inicio->forma;
     f->inicio = f->inicio->prox;
     if(f->inicio == NULL){
         f->fim = NULL;
@@ -92,22 +82,23 @@ Forma RetirarFila(Fila *fila){
     return removido;
 }
 
-void KillFila(Fila *fila){
+void KillFila(Fila fila){
     Stfila *f = ((Stfila*)fila);
 
     no *atual = f->inicio;
     while(atual != NULL){
-        no *prox = f->inicio->prox;
+        no *prox = atual->prox;
         free(atual);
-        atual->prox;
+        atual = prox;
     }
 
     f->fim = NULL;
     f->inicio = NULL;
     f->size = 0;
+    free(f);
 }
 
-void PassthroughQueue(Fila *fila, FILE *fs, Estilo st){
+void PassthroughQueue(Fila fila, FILE *fs, Estilo st){
     Stfila *f = ((Stfila*)fila);
     if(f == NULL || f->inicio == NULL){
         printf("Não há elementos suficientes na fila!\n");
@@ -123,7 +114,7 @@ void PassthroughQueue(Fila *fila, FILE *fs, Estilo st){
 }
 
 
-void SelectQueue(Forma *f, FILE *fs, Estilo st){
+void SelectQueue(Forma f, FILE *fs, Estilo st){
     switch (GetTipoForma(f))
     {
     case CIRCULO:
@@ -147,7 +138,7 @@ void SelectQueue(Forma *f, FILE *fs, Estilo st){
     }
 }
 
-int SizeFila(Fila *fila){
+int SizeFila(Fila fila){
     Stfila *f = ((Stfila*)fila);
     return f->size;
 }
