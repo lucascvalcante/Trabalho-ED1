@@ -7,14 +7,14 @@
 typedef void *Forma;
 
 typedef struct no{
-    Forma *forma;
+    Forma forma;
     char tipo;
     struct no *prox;
 }no;
 
 typedef struct{
     no *topo;
-    int *size;
+    int size;
 }Stpilha;
 
 Pilha Criar_Pilha(){
@@ -30,7 +30,7 @@ Pilha Criar_Pilha(){
     return ((Stpilha*)p);
 }
 
-void InserirPilha(Pilha *pilha, Forma forma){
+void InserirPilha(Pilha pilha, Forma forma){
     Stpilha *p = ((Stpilha*)pilha);
 
     no *novo = malloc(sizeof(no));
@@ -40,18 +40,12 @@ void InserirPilha(Pilha *pilha, Forma forma){
     } 
 
     novo->forma = forma;
-    if(p->topo == NULL){
-        p->topo = novo;
-        novo->prox = NULL;
-    }else{
-        novo->prox = p->topo;
-        p->topo = novo;
-    } 
-
+    novo->prox = p->topo;
+    p->topo = novo;
     p->size++;
 } 
 
-void RetirarPilha(Pilha *pilha){
+Forma RetirarPilha(Pilha pilha){
     Stpilha *p = ((Stpilha*)pilha);
 
     if(p->topo == NULL){
@@ -60,12 +54,14 @@ void RetirarPilha(Pilha *pilha){
     } 
 
     no* inicio = p->topo;
+    Forma removido = inicio->forma;
     p->topo = p->topo->prox;
     free(inicio);
     p->size--;
+    return removido;
 }
 
-Pilha TopoPilha(Pilha *pilha){
+Forma TopoPilha(Pilha pilha){
     Stpilha *p = ((Stpilha*)pilha);
 
     if(p->topo == NULL){
@@ -75,32 +71,21 @@ Pilha TopoPilha(Pilha *pilha){
     return p->topo->forma;
 }
 
-Pilha NextPilha(Pilha *pilha){
-    Stpilha *p = ((Stpilha*)pilha);
-
-    if(p->topo == NULL || p->topo->prox == NULL){
-        printf("A pilha não tem a quantidade de elementos suficientes!\n");
-        return NULL;
-    } 
-    return p->topo->prox;
-}
-
-void KillPilha(Pilha *pilha){
+void KillPilha(Pilha pilha){
     Stpilha *p = ((Stpilha*)pilha);
 
     no *atual = p->topo;
     while(atual != NULL){
-        no *proximo = p->topo->prox;
+        no *proximo = atual->prox;
         free(atual);
         atual = proximo;
     }
-
     p->topo = NULL;
     p->size = 0;
+    free(p);
 }
 
-int SizePilha(Pilha *pilha){
+int SizePilha(Pilha pilha){
     Stpilha *p = ((Stpilha*)pilha);
-
     return p->size;
 }

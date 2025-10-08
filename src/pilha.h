@@ -15,35 +15,29 @@ Pilha Criar_Pilha();
 /// @brief Insere um elemento no topo da pilha
 /// @param p Ponteiro apontando para a pilha
 /// @param f A forma que será inserida
-void InserirPilha(Pilha *p, Forma f);
+void InserirPilha(Pilha p, Forma f);
 
 
 /// @brief Retira um elemento do topo da pilha
 /// @param p Ponteiro apontando para a pilha
 /// @return O elemento que foi retirado
-void RetirarPilha(Pilha *p);
+Forma RetirarPilha(Pilha p);
 
 
 /// @brief Obtém o primeiro elemento da pilha sem removê-lo
 /// @param p Ponteiro apontando para a pilha
 /// @return Ponteiro para o topo da pilha
-Pilha TopoPilha(Pilha *p);
-
-
-/// @brief Obtém o primeiro elemento após o topo da pilha
-/// @param p Ponteiro apontando para a pilha
-/// @return Ponteiro para o próximo elemento em relação ao topo
-Pilha NextPilha(Pilha *p);
+Forma TopoPilha(Pilha p);
 
 
 /// @brief Libera toda a memória ocupada pela pilha
 /// @param p Ponteiro apontando para a pilha
-void KillPilha(Pilha *p); 
+void KillPilha(Pilha p); 
 
 
 /// @brief Verifica e retorna o tamanho da pilha
 /// @param p Ponteiro apontando para a pilha
 /// @return O tamanho da pilha
-int SizePilha(Pilha *p);
+int SizePilha(Pilha p);
 
 #endif
