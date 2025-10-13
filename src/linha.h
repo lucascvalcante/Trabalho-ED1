@@ -94,5 +94,8 @@ void SetCorLinha(Linha l, char *cor);
 /// @return A área calculada
 double AreaLinha(Linha l);
 
+/// @brief Libera toda a memória ocupada pela linha
+/// @param l Ponteiro apontando para a linha
+void KillLinha(Linha l);
 
 #endif

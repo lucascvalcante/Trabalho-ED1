@@ -79,10 +79,30 @@ void SetY2Linha(Linha l, double y2){
 }
 
 void SetCorLinha(Linha l, char *cor){
-    strcpy(((StLinha*)l)->cor, cor);
+    StLinha *li = ((StLinha*)l);
+    if(li == NULL || cor == NULL){
+        return;
+    } 
+
+    char *novacor = realloc(li->cor, strlen(cor)+1);
+    if(novacor == NULL){
+        return;
+    }
+    li->cor = novacor;
+    strcpy(li->cor, cor);
 }
+
 
 double AreaLinha(Linha l){
-    return 2 * sqrt(pow( ((StLinha*)l)->x2 - ((StLinha*)l)->x1, 2)) + pow( ((StLinha*)l)->y2 - ((StLinha*)l)->y1, 2); 
+    return 2 * sqrt((pow( ((StLinha*)l)->x2 - ((StLinha*)l)->x1, 2)) + pow( ((StLinha*)l)->y2 - ((StLinha*)l)->y1, 2)); 
 }
 
+void KillLinha(Linha l){
+    StLinha *li = ((StLinha*)l);
+    if(li == NULL){
+        return;
+    } 
+
+    free(li->cor);
+    free(li);
+}
