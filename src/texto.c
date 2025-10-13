@@ -32,6 +32,7 @@ Texto Criar_Texto(int id, double x, double y, char *corb, char *corp, char a, ch
     t->corb = malloc(strlen(corb)+1);
     if(t->corb == NULL){
         printf("Não foi possível alocar memória para a cor de borda do texto!\n");
+        free(t);
         exit(1);
     }
     strcpy(t->corb, corb);
@@ -39,6 +40,8 @@ Texto Criar_Texto(int id, double x, double y, char *corb, char *corp, char a, ch
     t->corp = malloc(strlen(corp)+1);
     if(t->corp == NULL){
         printf("Não foi possível alocar memória para a cor de preenchimento do texto!\n");
+        free(t->corb);
+        free(t);
         exit(1);
     }
     strcpy(t->corp, corp);
@@ -46,6 +49,9 @@ Texto Criar_Texto(int id, double x, double y, char *corb, char *corp, char a, ch
     t->txto = malloc(strlen(txto)+1);
     if(t->txto == NULL){
         printf("Não foi possível alocar memória para o texto!\n");
+        free(t->corb);
+        free(t->corp);
+        free(t);
         exit(1);
     }
     strcpy(t->txto, txto);
@@ -63,6 +69,7 @@ Estilo Criar_Estilo(char *fFamily, char *fWeight, char *fSize){
     st->fFamily = malloc(strlen(fFamily)+1);
     if(st->fFamily == NULL){
         printf("Não foi possível alocar memória para a família do texto!\n");
+        free(st);
         exit(1);
     }
     strcpy(st->fFamily, fFamily);
@@ -70,6 +77,8 @@ Estilo Criar_Estilo(char *fFamily, char *fWeight, char *fSize){
     st->fWeight = malloc(strlen(fWeight)+1);
     if(st->fWeight == NULL){
         printf("Não foi possível alocar memória para o weight do texto!\n");
+        free(st->fFamily);
+        free(st);
         exit(1);
     }
     strcpy(st->fWeight, fWeight);
@@ -77,6 +86,9 @@ Estilo Criar_Estilo(char *fFamily, char *fWeight, char *fSize){
     st->fSize = malloc(strlen(fSize)+1);
     if(st->fSize == NULL){
         printf("Não foi possível alocar memória para o tamanho do texto!\n");
+        free(st->fFamily);
+        free(st->fWeight);
+        free(st);
         exit(1);
     }
     strcpy(st->fSize, fSize);
@@ -98,15 +110,42 @@ char *GetfWeight(Estilo st){
 }
 
 void SetfFamily(Estilo st, char *fFamily){
-    strcpy(((StEstilo*)st)->fFamily, fFamily);
+    StEstilo *e = ((StEstilo*)st);
+    if(e == NULL){
+        return;
+    }
+    char *novoestilo = realloc(e->fFamily, strlen(fFamily)+1);
+    if(novoestilo == NULL){
+        return;
+    }
+    e->fFamily = novoestilo;
+    strcpy(e->fFamily, fFamily);
 }
 
 void SetfSize(Estilo st, char *fSize){
-    strcpy(((StEstilo*)st)->fSize, fSize);
+    StEstilo *e = ((StEstilo*)st);
+    if(e == NULL){
+        return;
+    }
+    char *novoestilo = realloc(e->fSize, strlen(fSize)+1);
+    if(novoestilo == NULL){
+        return;
+    }
+    e->fSize = novoestilo;
+    strcpy(e->fSize, fSize);
 }
 
-void SetfWeight(Estilo st, char *fWeigh){
-    strcpy(((StEstilo*)st)->fWeight, fWeigh);
+void SetfWeight(Estilo st, char *fWeight){
+    StEstilo *e = ((StEstilo*)st);
+    if(e == NULL){
+        return;
+    }
+    char *novoestilo = realloc(e->fWeight, strlen(fWeight)+1);
+    if(novoestilo == NULL){
+        return;
+    }
+    e->fWeight = novoestilo;
+    strcpy(e->fWeight, fWeight);
 }
 
 int GetIDTexto(Texto t){
@@ -154,11 +193,29 @@ void SetYTexto(Texto t, double y){
 }
 
 void SetCorbTexto(Texto t, char *corb){
-    ((StTexto*)t)->corb = corb;
+    StTexto *te = ((StTexto*)t);
+    if(te == NULL){
+        return;
+    }
+    char *novacor = realloc(te->corb, strlen(corb)+1);
+    if(novacor == NULL){
+        return;
+    }
+    te->corb = novacor;
+    strcpy(te->corb, corb);
 }
 
 void SetCorpTexto(Texto t, char *corp){
-    ((StTexto*)t)->corp = corp;
+    StTexto *te = ((StTexto*)t);
+    if(te == NULL){
+        return;
+    }
+    char *novacor = realloc(te->corp, strlen(corp)+1);
+    if(novacor == NULL){
+        return;
+    }
+    te->corp = novacor;
+    strcpy(te->corp, corp);
 }
 
 void SetATexto(Texto t, char a){
@@ -166,11 +223,42 @@ void SetATexto(Texto t, char a){
 }
 
 void SetTxtoTexto(Texto t, char *txto){
-    ((StTexto*)t)->txto = txto;
+    StTexto *te = ((StTexto*)t);
+    if(te == NULL){
+        return;
+    }
+    char *novotxto = realloc(te->txto, strlen(txto)+1);
+    if(novotxto == NULL){
+        return;
+    }
+    te->txto = novotxto;
+    strcpy(te->txto, txto);
 }
 
 Estilo GetEstilo(Texto t){
     return ((StTexto*)t)->st;
 }
 
+void KillTexto(Texto t){
+    StTexto *te = ((StTexto*)t);
+    if(te == NULL){
+        return;
+    } 
 
+    free(te->corb);
+    free(te->corp);
+    free(te->txto);
+    free(te);
+}
+
+
+void KillEstilo(Estilo st){
+    StEstilo *e = ((StEstilo*)st);
+    if(e == NULL){
+        return;
+    }
+    free(e->fFamily);
+    free(e->fSize);
+    free(e->fWeight);
+    free(e);
+}

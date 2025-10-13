@@ -8,9 +8,6 @@ typedef void *Estilo;
 */
 
 
-
- /*   --CRIADOR DO ESTILO DO TEXTO--  */
-
 /// @brief Função que cria e rotorna um estilo de texto
 /// @param fFamily Família da fonte
 /// @param fWeight Weight da fonte
@@ -19,8 +16,6 @@ typedef void *Estilo;
 Estilo Criar_Estilo(char *fFamily, char *fWeight, char *fSize);
 
 
-
- /*   --CRIADOR DO TEXTO--  */
 
 /// @brief Função que criar e retorna um texto com os atributos selecionados
 /// @param id Número de identificação do texto
@@ -34,9 +29,6 @@ Estilo Criar_Estilo(char *fFamily, char *fWeight, char *fSize);
 /// @return O texto
 Texto Criar_Texto(int id, double x, double y, char *corb, char *corp, char a, char *txto, Estilo st);
 
-
-
- /*   --MÉTODOS GET DO ESTILO DO TEXTO--  */
 
 /// @brief Retorna a família da fonte do texto
 /// @param st O estilo
@@ -56,9 +48,6 @@ char *GetfWeight(Estilo st);
 char *GetfSize(Estilo st);
 
 
-
- /*   --MÉTODOS SET DO ESTILO DO TEXTO--  */
-
 /// @brief Define a família da fonte do texto
 /// @param st O estilo
 /// @param fFamily A nova familia da fonte
@@ -75,9 +64,6 @@ void SetfWeight(Estilo st, char *fWeight);
 /// @param fSize O novo tamanho da fonte
 void SetfSize(Estilo st, char *fSize);
 
-
-
- /*   --MÉTODOS GET DO TEXTO--  */
 
 /// @brief Retorna o número de identificação do texto
 /// @param t O texto
@@ -127,9 +113,6 @@ char *GetTxtoTexto(Texto t);
 Estilo GetEstilo(Texto t);
 
 
-
- /*   --MÉTODOS SET DO TEXTO--  */
-
 /// @brief Define o número de identificação do texto
 /// @param t O texto
 /// @param id O novo número de identificação
@@ -172,13 +155,20 @@ void SetATexto(Texto t, char a);
 void SetTxtoTexto(Texto t, char *txto);
 
 
-
- /*   --CÁLCULO DE ÁREA--  */
-
 /// @brief Calcula e retorna a área do texto
 /// @param t O texto
 /// @return A área calculada
 double AreaTexto(Texto t);
+
+
+/// @brief Libera toda a memória ocupada pelo texto
+/// @param t Ponteiro apontando para o texto
+void KillTexto(Texto t);
+
+
+/// @brief Libera toda a memória ocupada pelo estilo do texto
+/// @param st Ponteiro apontando para o estilo
+void KillEstilo(Estilo st);
 
 
 #endif
