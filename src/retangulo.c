@@ -30,7 +30,7 @@ Retangulo Criar_Retangulo(int id, double x, double y, double w, double h, char *
     }
     strcpy(r->corb, corb);
 
-    r->corp = malloc(sizeof(corp)+1);
+    r->corp = malloc(strlen(corp)+1);
     if(r->corp == NULL){
         printf("Não foi possível alocar memória para a cor de preenchimento!\n");
         exit(1);
@@ -89,13 +89,44 @@ void SetHRetangulo(Retangulo r, double h){
 }
 
 void SetCorpRetangulo(Retangulo r, char *corp){
-    strcpy(((StRetangulo*)r)->corp, corp);
+    StRetangulo *re = ((StRetangulo*)r);
+    if(re == NULL || corp == NULL){
+        return;
+    }
+
+    char *novacor = realloc(re->corp, strlen(corp)+1);
+    if(novacor == NULL){
+        return;
+    }
+    re->corp = novacor;
+    strcpy(re->corp, corp);
 }
 
 void SetCorbRetangulo(Retangulo r, char *corb){
-    strcpy(((StRetangulo*)r)->corb, corb);
+    StRetangulo *re = ((StRetangulo*)r);
+    if(re == NULL || corb == NULL){
+        return;
+    }
+
+    char *novacor = realloc(re->corb, strlen(corb)+1);
+    if(novacor == NULL){
+        return;
+    }
+    re->corb = novacor;
+    strcpy(re->corb, corb);
 }
 
 double AreaRetangulo(Retangulo r){
     return ((StRetangulo*)r)->w * ((StRetangulo*)r)->h;
+}
+
+void KillRetangulo(Retangulo r){
+    StRetangulo *re = ((StRetangulo*)r);
+    if(re == NULL){
+        return;
+    }
+    
+    free(re->corb);
+    free(re->corp);
+    free(re);
 }

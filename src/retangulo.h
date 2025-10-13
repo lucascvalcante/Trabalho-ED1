@@ -109,4 +109,9 @@ void SetCorbRetangulo(Retangulo r, char *corb);
 double AreaRetangulo(Retangulo r);
 
 
+/// @brief Libera toda a memória alocada pelo retângulo 
+/// @param r Ponteiro apontando para o retângulo
+void KillRetangulo(Retangulo r);
+
+
 #endif
