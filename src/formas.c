@@ -39,10 +39,10 @@ double GetAreaForma(Forma f){
     }
 
     switch (((Stforma*)f)->tipo) {
-    case CIRCULO: return AreaCirculo(((Stforma*)f)); 
-    case RETANGULO: return AreaRetangulo(((Stforma*)f));
-    case TEXTO: return AreaTexto(((Stforma*)f));
-    case LINHA: return AreaLinha(((Stforma*)f));
+    case CIRCULO: return AreaCirculo(((Stforma*)f)->dados); 
+    case RETANGULO: return AreaRetangulo(((Stforma*)f)->dados);
+    case TEXTO: return AreaTexto(((Stforma*)f)->dados);
+    case LINHA: return AreaLinha(((Stforma*)f)->dados);
 
     }
 
@@ -102,8 +102,33 @@ void SetPosicaoForma(Forma f, double x, double y){
     }
 }
 
-void DestruirForma(Forma f){
+void DestruirForma(Forma forma){
+    Stforma *f = ((Stforma*)forma);
+    if(f == NULL){
+        return;
+    } 
 
+    void *dados = f->dados;
+    switch (f->tipo) {
+
+    case CIRCULO:
+        KillCirculo(f->dados);
+        break;
+    case RETANGULO: 
+        KillRetangulo(f->dados);
+        break;
+    case LINHA: 
+        KillLinha(f->dados);
+        break;
+    case TEXTO: 
+        KillTexto(f->dados);
+        break;
+    default:
+        printf("Forma inválida!\n");
+        break;
+    }
+
+    free(f);
 }
 
 
