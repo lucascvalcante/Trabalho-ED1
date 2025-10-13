@@ -96,5 +96,9 @@ void SetCorbCirculo(Circulo c, char *corb);
 double AreaCirculo(Circulo c);
 
 
+/// @brief Libera toda a memória armazenada pelo círculo
+/// @param c Ponteiro apontando para o círculo
+void KillCirculo(Circulo c);
+
 
 #endif

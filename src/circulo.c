@@ -88,13 +88,45 @@ void SetRCirculo(Circulo c, double r){
 }
 
 void SetCorpCirculo(Circulo c, char *corp){
-    strcpy(((StCirculo*)c)->corp, corp);
+    StCirculo *circ = ((StCirculo*)c);
+
+    if(circ == NULL || corp == NULL){
+        return;
+    }
+    char *novacor = realloc(circ->corp, strlen(corp)+1);
+    if(novacor == NULL){
+        return;
+    }
+
+    circ->corp = novacor;
+    strcpy(circ->corp, corp);
 }
 
 void setCorbCirculo(Circulo c, char *corb){
-    strcpy(((StCirculo*)c)->corb, corb);
+    StCirculo *circ = ((StCirculo*)c);
+    if(circ == NULL || corb == NULL){
+        return;
+    } 
+    char *novacor = realloc(circ->corb, strlen(corb)+1);
+    if(novacor == NULL){
+        return;
+    }
+
+    circ->corb = novacor;
+    strcpy(circ->corb, corb);
 }
 
 double AreaCirculo(Circulo c){
     return pi * pow(((StCirculo*)c)->r, 2);
+}
+
+void KillCirculo(Circulo c){
+    StCirculo *circ = ((StCirculo*)c);
+    if(circ == NULL){
+        return;
+    }
+    
+    free(circ->corb);
+    free(circ->corp);
+    free(circ);
 }
