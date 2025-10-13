@@ -50,3 +50,12 @@ void KillCarregador(Carregador carregador){
     KillPilha(c->formas);
     free(c);
 }
+
+Forma VerFormaCarregador(Carregador carregador){
+    Stcarregador *c = ((Stcarregador*)carregador);
+    if(c == NULL || c->formas == NULL){
+        return NULL;
+    }
+
+    return TopoPilha(c->formas);
+}

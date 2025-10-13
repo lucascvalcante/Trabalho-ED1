@@ -38,6 +38,12 @@ Forma RetirarCarregador(Carregador c);
 int GetSizeCarregador(Carregador c);
 
 
+/// @brief Retorna um ponteiro para a forma que está atualmente na posição de disparo 
+/// @param c Ponteiro para o carregador
+/// @return Um ponteiro para a forma
+Forma VerFormaCarregador(Carregador c);
+
+
 /// @brief Libera toda a memória alocada pelo carregador
 /// @param c Ponteiro para o carregador
 void KillCarregador(Carregador c);
