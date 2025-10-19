@@ -80,66 +80,76 @@ void KillArena(Arena arena){
 }
 
 void ProcessaArena(Arena arena, Chao chao, double *PontuacaoFinal, int *FormasEsmagadas, int *FormasClonadas, FILE *arquivotxt, Fila fila_svg){
-
     while(GetNumeroFormas(arena) >= 2){
         Forma f1 = RetirarArena(arena);
         Forma f2 = RetirarArena(arena);
         fprintf(arquivotxt, "\n[*] Analisando par: Forma ID %d vs Forma ID %d\n", GetIDForma(f1), GetIDForma(f2));
+        
         if(FormaSobrepoe(f1, f2)){
             double AreaF1 = GetAreaForma(f1);
             double AreaF2 = GetAreaForma(f2);
-            fprintf(arquivotxt, "\nSobreposição!. Área 1: %.2f, área 2: %.2f\n", AreaF1, AreaF2);
-
+            fprintf(arquivotxt, "\nSobreposição! Área 1: %.2f, área 2: %.2f\n", AreaF1, AreaF2);
+            
             if(AreaF1 < AreaF2){
                 fprintf(arquivotxt, "Forma %d esmagada! Pontos: + %.2f\n", GetIDForma(f1), AreaF1);
+                
                 double x = GetXForma(f1);
                 double y = GetYForma(f1);
-                Texto asterisco = Criar_Texto(-1, x, y, "red", "red", 'm', "*", NULL);  
+                
+                if(GetTipoForma(f1) == RETANGULO){
+                    Retangulo r = (Retangulo)GetDadosForma(f1);
+                    x = GetXRetangulo(r) + GetWRetangulo(r) / 2.0;
+                    y = GetYRetangulo(r) + GetHRetangulo(r) / 2.0;
+                }
+                else if(GetTipoForma(f1) == CIRCULO){
+                    Circulo c = (Circulo)GetDadosForma(f1);
+                    x = GetXCirculo(c);
+                    y = GetYCirculo(c);
+                }
+                
+                Estilo estilo_asterisco = Criar_Estilo("sans-serif", "bold", "30px");
+                Texto asterisco = Criar_Texto(-1, x, y, "red", "red", 'm', "*", estilo_asterisco);  
+                
                 if(asterisco){
-                    InserirFila(fila_svg, Criar_Forma(TEXTO, asterisco));
+                InserirFila(fila_svg, Criar_Forma(TEXTO, asterisco));
                 }
 
                 *PontuacaoFinal += AreaF1;
                 (*FormasEsmagadas)++;
                 DestruirForma(f1);
                 InserirChao(chao, f2);
-
-            }else{
-
+            }
+            else if(AreaF1 >= AreaF2){
                 fprintf(arquivotxt, "Forma %d muda a cor de borda da forma %d!\n", GetIDForma(f1), GetIDForma(f2));
 
                 if(GetTipoForma(f1) == LINHA){
-                    char *Corlinha = GetCorLinha(GetDadosForma(f1));
-                    char *CorComplementar = GetCorComplementar(Corlinha);
-
-                    if(CorComplementar){
-                        SetCorbForma(f2, CorComplementar);
-                        free(CorComplementar);
-                    }
-                    
-                    
-
-                }else{
-                    char* cor_preenchimento = GetCorpForma(f1);
-                    if(cor_preenchimento){
-                        SetCorbForma(f2, cor_preenchimento);
-                    }
+                    char *CorLinha = GetCorLinha(GetDadosForma(f1));
+                    char *CorComplementar = GetCorComplementar(CorLinha);   
+                    SetCorbForma(f2, CorComplementar);
+                    free(CorComplementar);
+                    free(CorLinha);
                 }
-
+                else{
+                    char *CorPreenchimento = GetCorpForma(f1);
+                    SetCorbForma(f2, CorPreenchimento);
+                }
+                
                 Forma clone1 = ClonarForma(f1);
-                if(clone1){
-                TrocaCoresForma(clone1);
-                InserirChao(chao, clone1);
-                (*FormasClonadas)++;
-                fprintf(arquivotxt, "Forma %d clonada e enviada para o chão!\n", GetIDForma(f1));
+                if(clone1 != NULL){                    
+                    printf("Clone id %d adicionado ao chão!\n", GetIDForma(clone1));
+                    (*FormasClonadas)++;
+                    fprintf(arquivotxt, "Forma %d clonada!\n", GetIDForma(f1));
+                }
+                
+                InserirChao(chao, f1);
+                InserirChao(chao, f2);
+                if(clone1 != NULL){
+                    InserirChao(chao, clone1);
+                    printf("Após inserção: Clone: borda %s, preenchimento %s", GetCorbForma(clone1), GetCorpForma(clone1));
+                }
             }
-
-            InserirChao(chao, f1);
-            InserirChao(chao, f2);
         }
-
-        } else{
-
+        else{
             fprintf(arquivotxt, "Sem sobreposição. Ambas as formas voltam para o chão!\n");
             InserirChao(chao, f1);
             InserirChao(chao, f2);
@@ -147,12 +157,8 @@ void ProcessaArena(Arena arena, Chao chao, double *PontuacaoFinal, int *FormasEs
     }
 
     if(GetNumeroFormas(arena) == 1){
-        Forma forma_restante = RetirarArena(arena);
-        fprintf(arquivotxt, "\n[*]Forma restante: id %d retorna ao chão.\n", GetIDForma(forma_restante));
-        InserirChao(chao, forma_restante);
+        InserirChao(chao, RetirarArena(arena));
     }
 }
-
-
 
 

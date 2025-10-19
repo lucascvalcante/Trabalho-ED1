@@ -285,7 +285,7 @@ Forma ClonarForma(Forma forma){
         return NULL;
     } 
 
-    static int id_base = 100;
+    static int id_base = 10000;
     int id_clone = ++id_base;
     Tipo_Forma tipo = GetTipoForma(f);
     void* dados_base = GetDadosForma(f);
@@ -307,7 +307,12 @@ Forma ClonarForma(Forma forma){
     case TEXTO: 
         Texto t = (Texto)dados_base;
         Estilo st_base = GetEstilo(t);
-        dados_clone = Criar_Texto(id_clone, GetXTexto(t), GetYTexto(t), GetCorbTexto(t), GetCorpTexto(t), GetATexto(t), GetTxtoTexto(t), st_base);
+        Estilo st_clone = NULL;
+
+        if(st_base != NULL){
+            st_clone = Criar_Estilo(GetfFamily(st_base), GetfWeight(st_base), GetfSize(st_base));
+        }
+        dados_clone = Criar_Texto(id_clone, GetXTexto(t), GetYTexto(t), GetCorbTexto(t), GetCorpTexto(t), GetATexto(t), GetTxtoTexto(t), st_clone);
         break;
     default:
         printf("Forma inválida!\n");
@@ -419,10 +424,6 @@ void TrocaCoresForma(Forma forma) {
         return;
     }
 
-   if (f == NULL) {
-		return;
-	}
-
 	char *cor_borda = GetCorbForma(f);
 	char *cor_preenchimento = GetCorpForma(f);
 
@@ -431,16 +432,22 @@ void TrocaCoresForma(Forma forma) {
 	}
 
 	char *copia_preenchimento = malloc(strlen(cor_preenchimento) + 1);
-	if (copia_preenchimento == NULL) {
+    char *copia_borda = malloc(strlen(cor_borda)+1);
+	if (copia_preenchimento == NULL || copia_borda == NULL) {
 		fprintf(stderr, "Erro ao alocar memória na função de trocar cores!\n");
+        free(copia_borda);
+        free(copia_preenchimento);
 		return;
 	}
-	strcpy(copia_preenchimento, cor_preenchimento);
 
-	SetCorpForma(f, cor_borda);
+	strcpy(copia_preenchimento, cor_preenchimento);
+    strcpy(copia_borda, cor_borda);
+
+	SetCorpForma(f, copia_borda);
 	SetCorbForma(f, copia_preenchimento);
 
 	free(copia_preenchimento);
+    free(copia_borda);
 }
 
 

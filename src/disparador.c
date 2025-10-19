@@ -5,6 +5,7 @@
 #include "carregador.h"
 #include "fila.h"
 #include "arena.h"
+#include "stdbool.h"
 
 typedef struct disparador{
     int id;
@@ -181,29 +182,29 @@ Fila RajadaDisparados(Disparador disparador, char botao, double dx, double dy, d
         return NULL;
     }
 
-    printf("DEBUG rajada: botão %c. Usado no carregador ID %d", botao, GetIDCarregador(c));
-    int num_disparos = GetSizeCarregador(c);
-    printf("DEBUG rajada: num_disparos = %d\n", num_disparos);
-    if(num_disparos == 0){
-        printf("DEBUG rajada: Carregador está vazio. Saindo!\n");
-        return NULL;
-    }
-
     Fila FormasDisparadas = Criar_Fila();
-    double dx1 = dx;
-    double dy1 = dy;
+    int i = 0;
 
-    for(int i = 0; i < num_disparos; i++){
-        Forma Forma_atual = RetirarCarregador(c);
-        if(Forma_atual == NULL){
+    while(true){
+        DisparadorShft(d, botao, 1);
+
+        Forma forma_atual = GetFormaEmDisparo(d);
+        if(forma_atual == NULL){
             break;
         }
-        SetPosicaoForma(Forma_atual, (d->x + dx1), (d->y)+dy1);
-        InserirArena(a, Forma_atual);
-        InserirFila(FormasDisparadas, Forma_atual);
-        dx1 += ix;
-        dy1 += iy;
+
+        double dx_atual = dx + i * ix;
+        double dy_atual = dy + i * iy;
+
+        SetPosicaoForma(forma_atual, d->x + dx_atual, d->y + dy_atual);
+        InserirArena(forma_atual, a);
+        InserirFila(FormasDisparadas, forma_atual);
+
+        d->formaEmDisparo = NULL;
+
+        i++;
     }
+
     return FormasDisparadas;
 }
 

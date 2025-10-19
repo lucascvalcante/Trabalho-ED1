@@ -23,11 +23,9 @@ int main(int argc, char *argv[]){
     char *ArqGeo = NULL;
     char *saida = NULL;
     char *ArqQry = NULL;
-    Estilo *estilos_criados = NULL;
-    int num_estilos = 0;
-
     double pontos = 0.0;
     int formas_clonadas = 0, formas_esmagadas = 0;
+
     Arena arena = CriarArena(1000, 800);
     Repositorio repo = CriarRepositorio();
     Fila svg = Criar_Fila();
@@ -57,11 +55,10 @@ int main(int argc, char *argv[]){
    char PathSvg[1024];
    snprintf(PathSvg, sizeof(PathSvg), "%s/%s.svg", saida, baseGeo);
 
-    Chao chao = ProcessaGeo(pathGeo, &estilos_criados, &num_estilos);
+    Chao chao = ProcessaGeo(pathGeo);
     if(chao == NULL){
         printf("DEBUG: Não foi possível criar o chão!\n");
-        if(estilos_criados != NULL) free(estilos_criados);
-        return 1;
+        exit(1);
     }
 
     printf("Geração do svg: %s\n", PathSvg);
@@ -83,33 +80,24 @@ int main(int argc, char *argv[]){
         snprintf(path_txt_final, sizeof(path_txt_final), "%s/%s-%s.txt", saida, baseGeo, nome_qry);
 
         ProcessarQry(repo, chao, path_qry, path_txt_final, arena, &pontos, svg, &formas_clonadas, &formas_esmagadas);
-        printf("Gerando svg final: %s\n", path_svg_final);
-        Svg svg_final_handle = CriarSvg(path_svg_final);
-        if(svg_final_handle){
-            int tamanho_fila_svg = SizeFila(svg);
-            if(tamanho_fila_svg == 0){
-                printf("DEBUG: Tamanho da fila do svg é 0!\n");
+        
+        while(SizeFila(svg) > 0){
+            Forma anotacao = RetirarFila(svg);
+            if(anotacao != NULL){
+                InserirChao(chao, anotacao);
             }
-            PassthroughQueue(GetFilaChao(chao), DesenharFormaSvg, svg_final_handle);
-            PassthroughQueue(svg, DesenharFormaSvg, svg_final_handle);
-            FinalizarSvg(svg_final_handle);
-        }else{
-            fprintf(stderr, "Erro ao criar svg final: %s\n", path_svg_final);
-        }  
+        }
+        
+        printf("Gerando svg final: %s\n", path_svg_final);
+        GerarSvg(path_svg_final, GetFilaChao(chao));
     }
 
     InserirFormasCarregadorChao(repo, chao);
     InserirFormasDisparadorChao(repo, chao);
+
     KillRepositorio(repo);
     DestruirChao(chao);
     KillArena(arena);
-
-    if(estilos_criados != NULL){
-        for(int i = 0; i < num_estilos; i++){
-            KillEstilo(estilos_criados[i]);
-        }
-        free(estilos_criados);
-    }
 
     while(SizeFila(svg) > 0){
         Forma anotacao = RetirarFila(svg);
@@ -122,4 +110,3 @@ int main(int argc, char *argv[]){
     printf("Programa finalizado!\n");
     return 0;
 }
-

@@ -246,9 +246,11 @@ void KillTexto(Texto t){
         return;
     } 
 
-    free(te->corb);
-    free(te->corp);
-    free(te->txto);
+    if(te->txto != NULL) free(te->txto);
+    if(te->corb != NULL) free(te->corb);
+    if(te->corp != NULL) free(te->corp);
+    if(te->st != NULL) KillEstilo(te->st);
+
     free(te);
 }
 

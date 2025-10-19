@@ -8,7 +8,7 @@
 #include "retangulo.h"
 #include "circulo.h"
 
-Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_estilos){
+Chao ProcessaGeo(const char *caminhoGeo){
     FILE *arqGeo = fopen(caminhoGeo, "r");
     if(arqGeo == NULL){
         printf("Não foi possível realizar a leitura do arquivo!\n");
@@ -22,17 +22,7 @@ Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_esti
         fclose(arqGeo);
         return NULL;
     }
-    Estilo estiloAtual = NULL;
-
-    int capacidade_estilos = 4; 
-    *num_estilos = 0;
-    *Estilos_criados = malloc(capacidade_estilos * sizeof(Estilo));
-    if (*Estilos_criados == NULL) {
-        DestruirChao(chao);
-        fclose(arqGeo);
-        printf("Falha ao alocar memória para os estilos!\n");
-        exit(1); 
-    }
+    Estilo estiloAtual = Criar_Estilo("sans-serif", "bold", "30px");
 
     while (fgets(buffer, sizeof(buffer), arqGeo) != NULL){
         if (buffer[0] == '\n' || buffer[0] == '#') {
@@ -43,16 +33,6 @@ Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_esti
         sscanf(buffer, "%s", comando);
 
          if (strcmp(comando, "ts") == 0) {
-            if (*num_estilos >= capacidade_estilos) {
-                capacidade_estilos *= 2;
-                Estilo *temp = realloc(*Estilos_criados, capacidade_estilos * sizeof(Estilo));
-                if (temp == NULL) {
-                    printf("erro ao alocar memória para os estilos!\n.\n");
-                    exit(1);
-                }
-                *Estilos_criados = temp;
-            }
-
             char fFamily[100], fWeight[100], fSize[100];
             int itens_lidos = sscanf(buffer, "%*s %99s %99s %99s", fFamily, fWeight, fSize);
             if(itens_lidos != 3){
@@ -60,13 +40,13 @@ Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_esti
                 continue;
             }
             
+            if(estiloAtual != NULL){
+                KillEstilo(estiloAtual);
+            }
             estiloAtual = Criar_Estilo(fFamily, fWeight, fSize);
             if(estiloAtual == NULL){
                 exit(1);
             }
-            
-            (*Estilos_criados)[*num_estilos] = estiloAtual;
-            (*num_estilos)++;
         }
         else {
 
@@ -136,23 +116,8 @@ Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_esti
 
                 char *conteudo_texto = buffer + chars_lidos;
                 conteudo_texto[strcspn(conteudo_texto, "\r\n")] = 0;
-                
-                if (estiloAtual == NULL) {
-                    if(*num_estilos >= capacidade_estilos){
-                        capacidade_estilos *= 2;
-                        Estilo *temp = realloc(*Estilos_criados, capacidade_estilos * sizeof(Estilo));
-                        if(temp == NULL){
-                            exit(1);
-                        }
-                        *Estilos_criados = temp;
-                    }
-
-                    estiloAtual = Criar_Estilo("sans-serif", "normal", "12");
-                    (*Estilos_criados)[*num_estilos] = estiloAtual;
-                    (*num_estilos)++;
-                }
-
-                Texto t = Criar_Texto(id, x, y, corb, corp, a, conteudo_texto, estiloAtual);
+                Estilo novo_estilo = CriarCopiaEstilo(estiloAtual);
+                Texto t = Criar_Texto(id, x, y, corb, corp, a, conteudo_texto, novo_estilo);
                 if(t){
                     Forma f = Criar_Forma(TEXTO, t);
                     if(f){
@@ -165,6 +130,7 @@ Chao ProcessaGeo(const char *caminhoGeo, Estilo **Estilos_criados, int *num_esti
         }
     }
 
+    KillEstilo(estiloAtual);
     fclose(arqGeo);
     return chao;
 }

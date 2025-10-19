@@ -362,6 +362,3 @@ void InserirFormasDisparadorChao(Repositorio repo, Chao chao){
         }
     }    
 }
-
-
-
