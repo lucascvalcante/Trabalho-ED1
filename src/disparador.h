@@ -2,6 +2,7 @@
 #define DISPARADOR_H
 #include "carregador.h"
 #include "formas.h"
+#include "arena.h"
 
 typedef void *Disparador;
 /*
@@ -56,11 +57,23 @@ void DisparadorAtch(Disparador d, Carregador esq, Carregador dir);
 
 /// @brief Coloca a carga do carregador em posição de disparo
 /// @param d Ponteiro para o disparador
-/// @param lado Define qual lado do disparador será usado(esquerdo/direito)
+/// @param botao Define qual lado do disparador será usado(esquerdo/direito)
 /// @param n Número de vezes que o botão será apertado
 /// @return Um ponteiro para a forma que ficou no ponto de disparo
 /// @details Caso ja houvesse alguma carga na posição de disparo, transfere essa carga para o topo do carregador contrário
-Forma DisparadorShft(Disparador d, LadoCarregador lado, int n);
+Forma DisparadorShft(Disparador d, char botao, int n);
+
+
+/// @brief Dispara as formas de um carregador em uma rajada sequencial
+/// @param d Ponteiro para o disparador que efetuará os disparos
+/// @param botao Caractere que define o carregador a ser usado(e-esquerdo/d-direito)
+/// @param dx Componente 'X' do vetor de direção do primeiro disparo
+/// @param dy Componente 'Y' do vetor de direção do primeiro disparo
+/// @param ix Valor a ser somado a 'dx' a cada disparo
+/// @param iy Valor a ser somado a 'dy' a cada disparo
+/// @param a Ponteiro apontando para a arena
+/// @return Uma fila contendo ponteiros para todas as formas que foram disparadas
+Fila RajadaDisparados(Disparador d, char botao, double dx, double dy, double ix, double iy, Arena a);
 
 
 /// @brief Disparada a forma que esta engatilhada
@@ -74,6 +87,11 @@ Forma DisparaDisparador(Disparador d, double dx, double dy);
 /// @brief Libera toda a memória alocada pelo disparador
 /// @param d Ponteiro apontando para o disparador
 void KillDisparador(Disparador d);
+
+
+/// @brief Retira a forma da posição de disparo, transferindo a posse
+/// @param d Ponteiro apontando para o disparador que contém a forma
+Forma RetirarFormaEmDisparo(Disparador d);
 
 
 #endif

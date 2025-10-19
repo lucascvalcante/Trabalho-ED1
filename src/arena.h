@@ -1,7 +1,11 @@
 #ifndef ARENA_H
 #define ARENA_H
-#include "fila.h"
+
 #include "formas.h"
+#include "svg.h"
+#include "chao.h"
+#include "fila.h"
+#include <stdio.h>
 
 /*/
     Arquivo .h relacionado a uma "arena", uma fila representando o cenário do jogo, onde as formas ficam armazenadas
@@ -9,6 +13,9 @@
 
 typedef void *Arena;
 typedef void *Forma;
+typedef void *Svg;
+typedef void *Chao;
+typedef void *Fila;
 
 /// @brief Armazena memória para a criação da arena do jogo
 /// @param largura Tamanho da largura da arena
@@ -64,7 +71,21 @@ double GetLarguraArena(Arena a);
 void KillArena(Arena a);
 
 
+/// @brief Processa a pontuação da rodada. Consome as formas da arena e as envia de volta para o chão,
+/// atualizando as estatísticas e pontuação do processo
+/// @param a Ponteiro para a arena com as formas que foram disparadas
+/// @param c Ponteiro para o chão onde as formas retornam após o processo
+/// @param Pontuacaofinal Um ponteiro para a variável de pontuação
+/// @param FormasEsmagadas Um ponteiro para a variével com o número de formas esmagadas
+/// @param FormasClonadas Um ponteiro para a variável com o número de formas clonadas
+/// @param arquivotxt A arquivo .txt para registrar os acontecimentos da rodada
+void ProcessaArena(Arena a, Chao c, double *Pontuacaofinal, int *FormasEsmagadas, int *FormasClonadas, FILE *arquivotxt, Fila fila_svg);
 
-void ProcessamentoArena(Arena a);
+
+/// @brief Passa por todas as formas presentes na arena e as desenha em um arquivo svg
+/// @param a 
+/// @param svg 
+void ArenaDesenharSvg(Arena a, Svg svg);
+
 
 #endif

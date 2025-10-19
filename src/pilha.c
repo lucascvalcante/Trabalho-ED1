@@ -8,7 +8,6 @@ typedef void *Forma;
 
 typedef struct no{
     Forma forma;
-    char tipo;
     struct no *prox;
 }no;
 
@@ -50,7 +49,7 @@ Forma RetirarPilha(Pilha pilha){
 
     if(p->topo == NULL){
         printf("A pilha está vazia!\nNada para retirar.\n");
-        exit(1);
+        return NULL;
     } 
 
     no* inicio = p->topo;

@@ -12,7 +12,8 @@ typedef struct Texto{
     int id;
     double x, y;
     char *corb, *corp;
-    char a, *txto;
+    char a;
+    char *txto;
     Estilo st;
 }StTexto;
 
@@ -262,3 +263,13 @@ void KillEstilo(Estilo st){
     free(e->fWeight);
     free(e);
 }
+
+Estilo CriarCopiaEstilo(Estilo st){
+    StEstilo *e = ((StEstilo*)st);
+    if(e == NULL){
+        return NULL;
+    }
+
+    return Criar_Estilo(e->fFamily, e->fWeight, e->fSize);
+}
+

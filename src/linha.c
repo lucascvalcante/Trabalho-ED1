@@ -27,6 +27,7 @@ Linha Criar_Linha(int id, double x1, double y1, double x2, double y2, char *cor)
     l->cor = malloc(strlen(cor)+1);
     if(l->cor == NULL){
         printf("Não foi possível alocar memória para a cor da linha!\n");
+        free(l);
         exit(1);
     }
     strcpy(l->cor, cor);

@@ -5,6 +5,9 @@
 #include "circulo.h"
 #include "linha.h"
 #include "retangulo.h"
+#include "fila.h"
+#include "arena.h"
+#include "formas.h"
 
 /*
     Arquivo .h relacionado a manipulação do arquivo em formato svg. Com funções para escrever e inserir formas no arquivo
@@ -14,10 +17,8 @@ typedef void* Svg;
 
 /// @brief Cria, abre e escreve o cabeçalho SVG em um arquivo
 /// @param nomearquivo O nome do arquivo que será criado
-/// @param largura A largura da imagem SVG
-/// @param altura A altura da imagem SVG
 /// @return Um ponteiro para a estrutura SVG
-Svg CriarSvg(const char* nomearquivo, double largura, double altura);
+Svg CriarSvg(const char* nomearquivo);
 
 
 /// @brief Insere a forma 'círculo' no svg
@@ -47,6 +48,18 @@ void InserirLinhaSvg(Svg svg, Linha l);
 /// @brief Finaliza e fecha o arquivo svg
 /// @param svg Ponteiro para a estrutura svg
 void FinalizarSvg(Svg svg);
+
+
+/// @brif Recebe uma fila de formas que serão geradas no svg
+/// @param path_svg Nome do arquivo .svg
+/// @param filaSvg Fila com as formas que serão adicionadas 
+void GerarSvg(const char* path_svg, Fila filaSvg);
+
+
+/// @brief Função para desenhar em um svg uma única forma genérica
+/// @param item Forma que será desenhada
+/// @param aux Ponteiro para dados auxiliares
+void DesenharFormaSvg(void* item, void* aux);
 
 
 #endif

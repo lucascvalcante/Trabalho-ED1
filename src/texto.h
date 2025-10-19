@@ -171,4 +171,10 @@ void KillTexto(Texto t);
 void KillEstilo(Estilo st);
 
 
+/// @brief Cria um cópia de um estilo com os mesmos dados
+/// @param st Estilo original
+/// @return Ponteiro para o novo estilo clonado
+Estilo CriarCopiaEstilo(Estilo st);
+
+
 #endif

@@ -11,7 +11,6 @@ typedef struct Circulo{
     int id;
     double x, y, r;
     char *corb, *corp;
-    Tipo_Forma tipo;
 }StCirculo;
 
 
@@ -27,11 +26,11 @@ Circulo Criar_Circulo(int id, double x, double y, double r, char *corp, char *co
     c->r = r;
     c->x = x;
     c->y = y;
-    c->tipo = CIRCULO;
 
     c->corb = malloc(strlen(corb)+1);
     if(c->corb == NULL){
         printf("Nao foi possivel alocar memoria para a cor de borda!\n");
+        free(c);
         exit(1);
     }
     strcpy(c->corb, corb);
@@ -39,6 +38,8 @@ Circulo Criar_Circulo(int id, double x, double y, double r, char *corp, char *co
     c->corp = malloc(strlen(corp)+1);
     if(c->corp == NULL){
         printf("Nao foi possivel alocar memória para a cor de preenchimento!\n");
+        free(c->corb);
+        free(c);
         exit(1);
     }
     strcpy(c->corp, corp);
@@ -47,7 +48,7 @@ Circulo Criar_Circulo(int id, double x, double y, double r, char *corp, char *co
 
 }
 
-int GetIDCirulo(Circulo c){
+int GetIDCirculo(Circulo c){
     return ((StCirculo*)c)->id;
 }
 
@@ -102,7 +103,7 @@ void SetCorpCirculo(Circulo c, char *corp){
     strcpy(circ->corp, corp);
 }
 
-void setCorbCirculo(Circulo c, char *corb){
+void SetCorbCirculo(Circulo c, char *corb){
     StCirculo *circ = ((StCirculo*)c);
     if(circ == NULL || corb == NULL){
         return;

@@ -2,6 +2,8 @@
 #define CARREGADOR_H
 #include "pilha.h"
 #include "formas.h"
+#include "chao.h"
+#include "fila.h"
 
 typedef enum{
     LadoEsquerdo,
@@ -15,15 +17,15 @@ typedef void *Carregador;
 
 
 /// @brief Cria e retorna um carregador
-/// @param lado O lado em que o carregador irá operar(direito ou esquerdo)
+/// @param id O número de identificação do carregador
 /// @return Ponteiro apontando para o carregador
-Carregador CriarCarregador(LadoCarregador lado);
+Carregador CriarCarregador(int id);
 
 
 /// @brief Adiciona uma forma no carregador
 /// @param c Ponteiro apontando para o carregador
 /// @param f Ponteiro apontando para a forma que será inserida
-void InserirCarregador(Carregador c, Forma f);
+Forma InserirCarregador(Carregador c, Forma f);
 
 
 /// @brief Retira e retorna uma forma que está no topo do carregador
@@ -47,6 +49,20 @@ Forma VerFormaCarregador(Carregador c);
 /// @brief Libera toda a memória alocada pelo carregador
 /// @param c Ponteiro para o carregador
 void KillCarregador(Carregador c);
+
+
+/// @brief Retorna o número de identificação do carregador
+/// @param c Ponteiro para o carregador
+/// @return Número de identificação
+int GetIDCarregador(Carregador c);
+
+
+/// @brief Insere dados de uma fila 'n' vezes em um carregador
+/// @param chao Ponteiro apontando para ao chão
+/// @param c Ponteiro apontando para o carregador
+/// @param n Número de vezes que os dados serão inseridos no carregador
+/// @return A fila com os dados inseridos no carregador
+Fila AdicionaNCarregador(Chao chao, Carregador c, int n);
 
 
 #endif

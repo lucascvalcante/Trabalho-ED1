@@ -1,13 +1,16 @@
 #include "disparador.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "formas.h"
+#include "carregador.h"
+#include "fila.h"
+#include "arena.h"
 
 typedef struct disparador{
     int id;
     double x, y;
     Carregador CarregadorEsquerdo;
     Carregador CarregadorDireito;
-    LadoCarregador ladoAtivo;
     Forma formaEmDisparo;
 }StDisparador;
 
@@ -24,7 +27,6 @@ Disparador CriarDisparador(int id, double x, double y){
     d->y = y;
     d->CarregadorEsquerdo = NULL;
     d->CarregadorDireito = NULL;
-    d->ladoAtivo = LadoEsquerdo;
     d->formaEmDisparo = NULL;
 
     return d;
@@ -86,44 +88,123 @@ void DisparadorAtch(Disparador disparador, Carregador esq, Carregador dir){
 
 } 
 
-Forma DisparadorShft(Disparador disparador, LadoCarregador lado, int n){
+Forma DisparadorShft(Disparador disparador, char botao, int n) {
     StDisparador *d = ((StDisparador*)disparador);
-    if(d == NULL || n <= 0){
+
+    // Verificação inicial (mantida)
+    if (d == NULL || n < 0) {
         return NULL;
     }
-    
-    Forma UltimaForma = NULL;
+
+    Forma forma_a_devolver = d->formaEmDisparo;
+
     Carregador fonte = NULL;
     Carregador destino = NULL;
+    Forma proxima_forma = NULL; 
 
-    for(int i = 0; i < n; i++){
-        if(lado == LadoEsquerdo){
-            fonte = d->CarregadorEsquerdo;
-            destino = d->CarregadorDireito;
-        } else{
-            fonte = d->CarregadorDireito;
-            destino = d->CarregadorEsquerdo;
-        }
 
-        if(fonte == NULL || destino == NULL){
-            printf("Pelo menos um dos carregadores não está anexado!\n");
-            d->formaEmDisparo = UltimaForma;
-            return UltimaForma;
-        }
+    for (int i = 0; i < n; i++) {
+        switch (botao) {
+            case 'd': 
+                fonte = d->CarregadorEsquerdo;
+                destino = d->CarregadorDireito;
 
-        if(GetSizeCarregador(fonte) == 0){
-            printf("O carregador esgotou durante o shft!\n");
-            d->formaEmDisparo = UltimaForma;
-            return UltimaForma;
-        }
+                if (fonte == NULL || destino == NULL) {
+                    printf("Pelo menos um dos carregadores não está anexado (shft 'd')!\n");
+                    return d->formaEmDisparo;
+                }
 
-        UltimaForma = RetirarCarregador(fonte);
-        InserirCarregador(destino, UltimaForma);
+                if (forma_a_devolver != NULL) {
+                    InserirCarregador(destino, forma_a_devolver);
+                    forma_a_devolver = NULL;
+                }
+
+                if (GetSizeCarregador(fonte) == 0) {
+                    printf("O carregador esquerdo esgotou durante o shft 'd'!\n");
+                    d->formaEmDisparo = NULL;
+                    return NULL; 
+                }
+
+                proxima_forma = RetirarCarregador(fonte);
+                d->formaEmDisparo = proxima_forma;
+                forma_a_devolver = proxima_forma;
+
+                break; 
+
+            case 'e': 
+                fonte = d->CarregadorDireito;
+                destino = d->CarregadorEsquerdo;
+
+                if (fonte == NULL || destino == NULL) {
+                    printf("Pelo menos um dos carregadores não está anexado (shft 'e')!\n");
+                    return d->formaEmDisparo; 
+                }
+
+                if (forma_a_devolver != NULL) {
+                    InserirCarregador(destino, forma_a_devolver);
+                    forma_a_devolver = NULL;
+                }
+
+                if (GetSizeCarregador(fonte) == 0) {
+                    printf("O carregador direito esgotou durante o shft 'e'!\n");
+                    d->formaEmDisparo = NULL;
+                    return NULL;
+                }
+                proxima_forma = RetirarCarregador(fonte);
+                d->formaEmDisparo = proxima_forma;
+                forma_a_devolver = proxima_forma;
+                break; 
+
+            default: 
+                printf("Botao invalido para shft: '%c'\n", botao);
+                return d->formaEmDisparo;
+        } 
+    } 
+
+    return d->formaEmDisparo;
+}
+
+Fila RajadaDisparados(Disparador disparador, char botao, double dx, double dy, double ix, double iy, Arena a){
+    StDisparador *d = ((StDisparador*)disparador);
+    if(d == NULL){
+        return NULL;
     }
 
-    d->formaEmDisparo = UltimaForma;
-    return UltimaForma;
+    Carregador c = NULL;
+    if(botao == 'e' || botao == 'E'){
+        c = d->CarregadorEsquerdo;
+    }else if(botao == 'd' || botao == 'D'){
+        c = d->CarregadorDireito;
+    }
+    if(c == NULL){
+        printf("Carregador não conectado!\n");
+        return NULL;
+    }
 
+    printf("DEBUG rajada: botão %c. Usado no carregador ID %d", botao, GetIDCarregador(c));
+    int num_disparos = GetSizeCarregador(c);
+    printf("DEBUG rajada: num_disparos = %d\n", num_disparos);
+    if(num_disparos == 0){
+        printf("DEBUG rajada: Carregador está vazio. Saindo!\n");
+        return NULL;
+    }
+
+    Fila FormasDisparadas = Criar_Fila();
+    double dx1 = dx;
+    double dy1 = dy;
+
+    for(int i = 0; i < num_disparos; i++){
+        Forma Forma_atual = RetirarCarregador(c);
+        if(Forma_atual == NULL){
+            break;
+        }
+        SetPosicaoForma(Forma_atual, (d->x + dx1), (d->y)+dy1);
+        InserirArena(a, Forma_atual);
+        InserirFila(FormasDisparadas, Forma_atual);
+        dx1 += ix;
+        dy1 += iy;
+    }
+    return FormasDisparadas;
 }
 
 Forma DisparaDisparador(Disparador disparador, double dx, double dy){
@@ -155,12 +236,17 @@ void KillDisparador(Disparador disparador){
     if(d == NULL){
         return;
     }
-
-    if(d->CarregadorDireito != NULL){
-        KillCarregador(d->CarregadorDireito);
-    } 
-    if(d->CarregadorEsquerdo != NULL){
-        KillCarregador(d->CarregadorEsquerdo);
-    }
     free(d);
+}
+
+
+Forma RetirarFormaEmDisparo(Disparador disparador){
+    StDisparador *d = ((StDisparador*)disparador);
+    if(d == NULL){
+        return NULL;
+    }
+
+    Forma forma_retirada = d->formaEmDisparo;
+    d->formaEmDisparo = NULL;
+    return forma_retirada;
 }

@@ -1,5 +1,6 @@
 #ifndef FORMAS_H
 #define FORMAS_H
+#include <stdio.h>
 
 /* 
     Arquivo .h Relacionado a formas, permitindo que diferentes formas sejam tratadas de maneira uniforme.
@@ -53,6 +54,72 @@ double GetAreaForma(Forma f);
 /// @param x A posição na coordenada X
 /// @param y A posição na coordenada Y
 void SetPosicaoForma(Forma f, double x, double y);
+
+
+/// @brief Insere os dados de uma forma qualquer em um arquivo .txt
+/// @param f Ponteiro apontando para uma forma genérica
+/// @param txt Arquivo txt no qual será feito o relatório das formas
+/// @param reportQry Início padrão do .qry
+void InserirDadosTxt(Forma f, FILE *txt, char *reportQry);
+
+
+/// @brief Retorna a coordenada X de uma forma genérica
+/// @param f Ponteiro apontando para a forma
+/// @return A coordenada X
+double GetXForma(Forma f);
+
+
+/// @brief Retorna a coordenada Y de uma forma genérica
+/// @param f Ponteiro para a forma
+/// @return A coordenada Y
+double GetYForma(Forma f);
+
+
+/// @brief Retorna o número de identificação de uma forma genérica
+/// @param f Ponteiro para a forma
+/// @return O número de identificação 
+int GetIDForma(Forma f);
+
+
+/// @brief Retorna a cor de preenchimento da forma
+/// @param f Ponteiro apontando para a forma 
+/// @return A cor de preenchimento
+char *GetCorpForma(Forma f);
+
+
+/// @brief Retorna a cor de borda de uma forma;
+/// @param f Ponteiro apontando para a forma 
+/// @return A cor de borda
+char *GetCorbForma(Forma f);
+
+
+/// @brief Cria um cópia de uma forma qualquer
+/// @param f Ponteiro apontando para a forma
+/// @return Ponteiro para a forma clonada
+Forma ClonarForma(Forma f);
+
+
+/// @brief Retorna o nome da cor complementar para uma cor de entrada
+/// @param cor_original A cor original
+/// @return A cor complementar
+char *GetCorComplementar(const char* cor_original);
+
+
+/// @brief Define a cor de borda para uma forma qualquer 
+/// @param f Ponteiro apontando para a forma
+/// @param corb A cor de borda que será inserida
+void SetCorbForma(Forma f, char *corb);
+
+
+/// @brief Define a cor de preecnhimento para uma forma qualquer 
+/// @param f Ponteiro apontando para a forma
+/// @param corb A cor de preecnhimento que será inserida
+void SetCorpForma(Forma f, char *corp);
+
+
+/// @brief Troca a cor de borda com a cor de preenchimento de uma mesma forma
+/// @param f Ponteiro apontando para a forma
+void TrocaCoresForma(Forma f);
 
 
 #endif

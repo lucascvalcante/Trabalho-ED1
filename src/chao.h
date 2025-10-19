@@ -1,8 +1,10 @@
 #ifndef CHAO_H
 #define CHAO_H
-#include  "formas.h"
+#include "formas.h"
+#include "fila.h"
 
 typedef void *Chao;
+typedef void *Fila;
 /*
     Arquivo .h relacionado ao "chão", elemento lúdico de armazenamento das formas que ainda não estão em jogo, como um repositório
 */
@@ -28,6 +30,11 @@ Forma RetiraChao(Chao c);
 /// @brief Libera toda a memória armazenada pelo chão
 /// @param c Ponteiro apontando para o chão
 void DestruirChao(Chao c);
+
+/// @brief Retorna a fila do chão
+/// @param c Ponteiro apontando para o chão
+/// @return A fila do chão
+Fila GetFilaChao(Chao c);
 
 
 #endif

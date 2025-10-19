@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "svg.h"
 
 typedef void *Forma;
 
 typedef struct no{
     Forma forma;
-    char tipo;
     struct no *prox;
 }no;
 
@@ -37,7 +37,7 @@ void InserirFila(Fila fila, Forma forma){
 
     no *novo = malloc(sizeof(no));
     if(novo == NULL){
-        printf("Não foi possível alocar memória!\n");
+        printf("Não foi possível alocar memória para a fila!\n");
         exit(1);
     }
 
@@ -69,7 +69,7 @@ Forma RetirarFila(Fila fila){
 
     if(f->inicio == NULL){
         printf("A fila está vazia!\nNada para retirar.\n");
-        exit(1);
+        return NULL;
     }
     no *first = f->inicio;
     Forma removido = f->inicio->forma;
@@ -98,7 +98,7 @@ void KillFila(Fila fila){
     free(f);
 }
 
-void PassthroughQueue(Fila fila, FILE *fs, Estilo st){
+void PassthroughQueue(Fila fila, void (*acao)(void *item, void *aux_data),void *aux_data){
     Stfila *f = ((Stfila*)fila);
     if(f == NULL || f->inicio == NULL){
         printf("Não há elementos suficientes na fila!\n");
@@ -107,34 +107,8 @@ void PassthroughQueue(Fila fila, FILE *fs, Estilo st){
 
     no* atual = f->inicio;
     while(atual != NULL){
-        Forma formaatual = (Forma) atual->forma;
-        SelectQueue(formaatual, fs, st);
+        acao(atual->forma, aux_data);
         atual = atual->prox;
-    }
-}
-
-
-void SelectQueue(Forma f, FILE *fs, Estilo st){
-    switch (GetTipoForma(f))
-    {
-    case CIRCULO:
-        
-        break;
-    case RETANGULO: 
-
-        break;
-
-    case LINHA: 
-
-        break;
-
-    case TEXTO: 
-
-        break;
-
-    default:
-        printf("A forma inserida não é válida!\n");
-        break;
     }
 }
 
