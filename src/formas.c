@@ -432,7 +432,7 @@ void TrocaCoresForma(Forma forma) {
 
 	char *copia_preenchimento = malloc(strlen(cor_preenchimento) + 1);
 	if (copia_preenchimento == NULL) {
-		fprintf(stderr, "Erro de memoria na funcao alternaCores!\n");
+		fprintf(stderr, "Erro ao alocar memória na função de trocar cores!\n");
 		return;
 	}
 	strcpy(copia_preenchimento, cor_preenchimento);

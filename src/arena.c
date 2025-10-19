@@ -95,32 +95,48 @@ void ProcessaArena(Arena arena, Chao chao, double *PontuacaoFinal, int *FormasEs
                 double x = GetXForma(f1);
                 double y = GetYForma(f1);
                 Texto asterisco = Criar_Texto(-1, x, y, "red", "red", 'm', "*", NULL);  
-                InserirFila(fila_svg, Criar_Forma(TEXTO, asterisco));
+                if(asterisco){
+                    InserirFila(fila_svg, Criar_Forma(TEXTO, asterisco));
+                }
+
                 *PontuacaoFinal += AreaF1;
                 (*FormasEsmagadas)++;
                 DestruirForma(f1);
                 InserirChao(chao, f2);
 
-            }else if(AreaF1 >= AreaF2){
+            }else{
 
                 fprintf(arquivotxt, "Forma %d muda a cor de borda da forma %d!\n", GetIDForma(f1), GetIDForma(f2));
 
                 if(GetTipoForma(f1) == LINHA){
-                    char *Corlinha = GetCorLinha(f1);
+                    char *Corlinha = GetCorLinha(GetDadosForma(f1));
                     char *CorComplementar = GetCorComplementar(Corlinha);
-                    SetCorbForma(f2, CorComplementar);
-                    free(CorComplementar);
+
+                    if(CorComplementar){
+                        SetCorbForma(f2, CorComplementar);
+                        free(CorComplementar);
+                    }
+                    
+                    
+
                 }else{
-                    SetCorbForma(f2, GetCorpForma(f1));
+                    char* cor_preenchimento = GetCorpForma(f1);
+                    if(cor_preenchimento){
+                        SetCorbForma(f2, cor_preenchimento);
+                    }
                 }
-                InserirChao(chao, f1);
-                InserirChao(chao, f2);
+
                 Forma clone1 = ClonarForma(f1);
+                if(clone1){
                 TrocaCoresForma(clone1);
                 InserirChao(chao, clone1);
                 (*FormasClonadas)++;
                 fprintf(arquivotxt, "Forma %d clonada e enviada para o chão!\n", GetIDForma(f1));
             }
+
+            InserirChao(chao, f1);
+            InserirChao(chao, f2);
+        }
 
         } else{
 
