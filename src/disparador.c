@@ -80,9 +80,6 @@ void DisparadorAtch(Disparador disparador, Carregador esq, Carregador dir){
         return;
     } 
 
-    if (d->CarregadorEsquerdo != NULL) KillCarregador(d->CarregadorEsquerdo);
-    if (d->CarregadorDireito != NULL) KillCarregador(d->CarregadorDireito);
-
     d->CarregadorDireito = dir;
     d->CarregadorEsquerdo = esq;
     d->formaEmDisparo = NULL;
