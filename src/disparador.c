@@ -89,7 +89,6 @@ void DisparadorAtch(Disparador disparador, Carregador esq, Carregador dir){
 Forma DisparadorShft(Disparador disparador, char botao, int n) {
     StDisparador *d = ((StDisparador*)disparador);
 
-    // Verificação inicial (mantida)
     if (d == NULL || n < 0) {
         return NULL;
     }

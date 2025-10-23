@@ -136,7 +136,6 @@ void ProcessaArena(Arena arena, Chao chao, double *PontuacaoFinal, int *FormasEs
                 
                 Forma clone1 = ClonarForma(f1);
                 if(clone1 != NULL){                    
-                    printf("Clone id %d adicionado ao chão!\n", GetIDForma(clone1));
                     (*FormasClonadas)++;
                     fprintf(arquivotxt, "Forma %d clonada!\n", GetIDForma(f1));
                 }
@@ -144,8 +143,7 @@ void ProcessaArena(Arena arena, Chao chao, double *PontuacaoFinal, int *FormasEs
                 InserirChao(chao, f1);
                 InserirChao(chao, f2);
                 if(clone1 != NULL){
-                    InserirChao(chao, clone1);
-                    printf("Após inserção: Clone: borda %s, preenchimento %s", GetCorbForma(clone1), GetCorpForma(clone1));
+                    InserirChao(chao, clone1);                 
                 }
             }
         }

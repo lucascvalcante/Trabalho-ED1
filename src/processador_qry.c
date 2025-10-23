@@ -199,26 +199,23 @@ static int handle_dsp(CommandContext* ctx){
 
                 Forma forma_linha_cinza1 = Criar_Forma(LINHA, Criar_Linha(-1, x2, y1, x2, y2, "grey"));
                 if(forma_linha_cinza1){
-                    InserirFila(ctx->filaSvg, forma_linha_cinza1); 
-                    printf("DEBUG: Linha cinza 1 inserida na fila svg!\n");
+                    InserirFila(ctx->filaSvg, forma_linha_cinza1);                     
                 }else{
-                    printf("DEBUG: Erro ao inserir linha cinza 1 no svg!\n");
+                    printf("Erro ao inserir linha cinza 1 no svg!\n");
                 }
 
                 Forma forma_linha_cinza2 = Criar_Forma(LINHA, Criar_Linha(-1, x1, y2, x2, y2, "grey"));
                 if(forma_linha_cinza2){
-                    InserirFila(ctx->filaSvg, forma_linha_cinza2);
-                    printf("DEBUG: Linha cinza 2 inserida no svg!\n");
+                    InserirFila(ctx->filaSvg, forma_linha_cinza2);                   
                 }else{
-                    printf("DEBUG: Erro ao criar linha cinza 2 e inserir no svg!\n");
+                    printf("Erro ao criar linha cinza 2 e inserir no svg!\n");
                 }
 
                 Forma forma_linha_roxa = Criar_Forma(LINHA, Criar_Linha(-1, x1, y1, x2, y2, "purple"));
                 if(forma_linha_roxa){
                     InserirFila(ctx->filaSvg, forma_linha_roxa);
-                    printf("DEBUG: Linha roxa inserida no svg!\n");
                 }else{
-                    printf("DEBUG>: Não foi possível criar linha roxa e inserir no svg!\n");
+                    printf("Não foi possível criar linha roxa e inserir no svg!\n");
                 }
         
             }
